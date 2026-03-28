@@ -1,0 +1,8 @@
+{
+    "storage_type": "file",
+    "file_path": "./location.json",
+    "cache_type": "redis",
+    "redis_addr": "localhost:6379",
+    "default_lat": 53.6688,
+    "default_lon": 23.8223
+}
