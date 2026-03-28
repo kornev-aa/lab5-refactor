@@ -3,10 +3,10 @@ package main
 import (
     "fmt"
     "os"
-    "github.com/kornev-aa/lab5-cache/internal/pkg/gui"
-    "github.com/kornev-aa/lab5-cache/pkg/config"
-    "github.com/kornev-aa/lab5-cache/pkg/logger"
-    "github.com/kornev-aa/lab5-cache/pkg/storage"
+    "github.com/kornev-aa/lab5-refactor/internal/pkg/gui"
+    "github.com/kornev-aa/lab5-refactor/pkg/config"
+    "github.com/kornev-aa/lab5-refactor/pkg/logger"
+    "github.com/kornev-aa/lab5-refactor/pkg/storage"
 )
 
 func main() {

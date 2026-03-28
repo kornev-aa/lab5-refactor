@@ -7,9 +7,9 @@ import (
     "fyne.io/fyne/v2/app"
     "fyne.io/fyne/v2/container"
     "fyne.io/fyne/v2/widget"
-    "github.com/kornev-aa/lab5-cache/internal/pkg/weather"
-    "github.com/kornev-aa/lab5-cache/pkg/logger"
-    "github.com/kornev-aa/lab5-cache/pkg/storage"
+    "github.com/kornev-aa/lab5-refactor/internal/pkg/weather"
+    "github.com/kornev-aa/lab5-refactor/pkg/logger"
+    "github.com/kornev-aa/lab5-refactor/pkg/storage"
 )
 
 type GUIApp struct {

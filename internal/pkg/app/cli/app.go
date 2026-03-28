@@ -2,10 +2,7 @@ package cli
 
 import (
     "fmt"
-    "time"
-    "github.com/kornev-aa/lab5-cache/internal/pkg/weather"
-    "github.com/kornev-aa/lab5-cache/pkg/cache"
-    "github.com/kornev-aa/lab5-cache/pkg/storage"
+    "github.com/kornev-aa/lab5-refactor/internal/domain/models"
 )
 
 type Logger interface {
@@ -14,48 +11,33 @@ type Logger interface {
     Error(msg string, err error)
 }
 
-type cliApp struct {
-    log     Logger
-    storage storage.LocationStorage
-    weather *weather.WeatherService
+type WeatherInfo interface {
+    GetTemperature(lat, lon float64) models.TempInfo
 }
 
-func New(log Logger, storage storage.LocationStorage, cache cache.Cache, cacheTTL time.Duration) *cliApp {
+type cliApp struct {
+    l  Logger
+    wi WeatherInfo
+}
+
+func New(l Logger, wi WeatherInfo) *cliApp {
     return &cliApp{
-        log:     log,
-        storage: storage,
-        weather: weather.NewWeatherService(cache, cacheTTL),
+        l:  l,
+        wi: wi,
     }
 }
 
 func (c *cliApp) Run() error {
-    c.log.Info("Запуск приложения")
+    c.l.Info("Запуск приложения")
 
-    lat, err := c.storage.GetLatitude()
-    if err != nil {
-        c.log.Debug("Не удалось загрузить широту, используем значение по умолчанию")
-        lat = 53.6688
-    }
+    // Координаты Гродно (можно потом загружать из storage)
+    lat := 53.6688
+    lon := 23.8223
 
-    lon, err := c.storage.GetLongitude()
-    if err != nil {
-        c.log.Debug("Не удалось загрузить долготу, используем значение по умолчанию")
-        lon = 23.8223
-    }
+    c.l.Info(fmt.Sprintf("Координаты: широта=%.4f, долгота=%.4f", lat, lon))
 
-    c.log.Info(fmt.Sprintf("Координаты: широта=%.4f, долгота=%.4f", lat, lon))
+    temp := c.wi.GetTemperature(lat, lon)
 
-    result, err := c.weather.GetWeather(lat, lon)
-    if err != nil {
-        c.log.Error("Ошибка получения погоды", err)
-        return err
-    }
-
-    fmt.Printf("Температура воздуха - %.2f градусов цельсия\n", result.Current.Temperature)
+    fmt.Printf("Температура воздуха - %.2f градусов цельсия\n", temp.Temp)
     return nil
-}
-
-func (c *cliApp) SaveLocation(lat, lon float64) error {
-    c.log.Info(fmt.Sprintf("Сохранение координат: %.4f, %.4f", lat, lon))
-    return c.storage.SaveLocation(lat, lon)
 }
